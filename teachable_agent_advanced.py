@@ -1,6 +1,7 @@
 from autogen.agentchat.contrib.capabilities.teachability import Teachability
 from autogen import ConversableAgent, UserProxyAgent
 import os
+import requests
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -8,6 +9,9 @@ class CustomConversableAgent(ConversableAgent):
     def __init__(self, name, llm_config, identity_prompts, *args, **kwargs):
         super().__init__(name=name, llm_config=llm_config, *args, **kwargs)
         self.identity_prompts = identity_prompts
+        # Extracting the API key and base URL for later use
+        self.api_key = llm_config['config_list'][0]['api_key']
+        self.base_url = llm_config['config_list'][0]['base_url']
 
     def handle_request(self, message):
         if message.startswith("self-reflect:"):
@@ -28,8 +32,23 @@ class CustomConversableAgent(ConversableAgent):
         return output
 
     def llm_predict(self, prompt):
-        # Simulate an LLM prediction, replace with actual prediction logic as necessary
-        return "This is a simulated response to the reflection prompt."
+        url = f"{self.base_url}/api/generate"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "dolphin-llama3:8b-v2.9-fp16",
+            "prompt": prompt
+        }
+        try:
+            response = requests.post(url, json=data, headers=headers)
+            response.raise_for_status()  # Raises an HTTPError for bad responses
+            return response.json()['text']
+        except requests.exceptions.HTTPError as http_err:
+            return f"HTTP error occurred: {http_err}"  # Specific HTTP error
+        except Exception as err:
+            return f"Other error occurred: {err}"  # Any other error
 
 config_list = [
     {
