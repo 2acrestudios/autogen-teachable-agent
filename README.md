@@ -1,27 +1,25 @@
 # autogen-teachable-agent
 This Python script is a basic implementation of AutoGen Teachable Agent using Ollama. I've had good results using the new Llama 3 models to power it. The example is using the Dolphin 2.9 model by Eric Hartford based on Llama 3. You will need AutoGen and Ollama installed.
 
-
-Below is a sample `README.md` document for the Python code provided, tailored for inclusion in your GitHub repository. This document will guide users on setting up and understanding the functionality of your custom conversable agent based on the AutoGen framework.
-
----
-
 # Custom Conversable Agent
 
-This repository contains the implementation of a custom conversable agent named "Lou the Corgi". This agent, built using the AutoGen framework, enriches interactions with a unique identity and integrates a teachability module to facilitate conversational adaptability.
+This repository hosts two versions of a custom conversable agent named "Lou the Corgi". These agents are built using the AutoGen framework, enriched with unique identity prompts, and integrate a teachability module to adapt and learn from interactions. The advanced version extends functionality with self-reflection capabilities and direct API integration.
 
 ## Features
 
-- **Custom Identity Prompt**: The agent responds with a unique identity, enhancing the user experience.
-- **Teachability**: Enables the agent to learn from interactions, improving response accuracy over time.
-- **User Proxy Agent**: Allows the agent to simulate user interactions for testing and development purposes.
+- **Custom Identity Prompt**: Both versions of the agent enhance user experience by responding with a unique identity.
+- **Teachability**: Integrates a learning component allowing the agent to improve based on past interactions, present in both versions.
+- **User Proxy Agent**: Simulates user interactions, useful for testing and development, used in both versions.
+- **Self-Reflection and API Interaction**: Exclusive to the advanced version, enabling the agent to reflect on its thoughts and interact directly with APIs.
 
 ## Requirements
 
-To set up the project environment, ensure you have Python 3.8+ installed, and then install the dependencies from the `requirements.txt` file included in this repository. Do it in a virtual environment of your choice, or don't. But if you build more on top of this, you'll appreciate it later!
+Ensure Python 3.8+ is installed, then install dependencies from `requirements.txt`:
 
 ```plaintext
 autogen==1.0.16
+virtualenv
+requests  # Required for the advanced version
 ```
 
 ## Installation
@@ -41,7 +39,7 @@ autogen==1.0.16
 
 ## Usage
 
-To run the agent, execute the Python script:
+Run the agent by executing the Python script:
 
 ```bash
 python custom_conversable_agent.py
@@ -49,31 +47,44 @@ python custom_conversable_agent.py
 
 ## Code Explanation
 
-### Setting Environment Variables
+### Environment Configuration
+
+Disabling tokenizer parallelism to avoid multi-threading issues:
 
 ```python
 import os
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 ```
-This line disables tokenizer parallelism to avoid multi-threading issues, commonly required in environments with limited threading support.
 
-### Custom Conversable Agent Class
+### Advanced Custom Conversable Agent Class
+
+Enhancements include API interactions and added methods for self-reflection:
 
 ```python
 from autogen import ConversableAgent
+import requests
 
 class CustomConversableAgent(ConversableAgent):
+    # Initialization includes storing API keys and base URL
     def __init__(self, name, llm_config, identity_prompts, *args, **kwargs):
-        super().__init__(name=name, llm_config=llm_config, *args, **kwargs)
-        self.identity_prompts = identity_prompts
-
+        ...
+    
+    # Enhanced request handling to include self-reflection and API requests
     def handle_request(self, message):
-        modified_message = f"{self.identity_prompts} {message}"
-        return super().handle_request(modified_message)
+        ...
+    
+    # Self-reflection method
+    def reflect(self, message):
+        ...
+    
+    # API interaction method
+    def llm_predict(self, prompt):
+        ...
 ```
-This class extends `ConversableAgent` to prepend identity prompts to each message, embedding a unique character for the agent.
 
 ### Teachability
+
+Enabling the agent to learn and adapt from user interactions is consistent across both versions:
 
 ```python
 from autogen.agentchat.contrib.capabilities.teachability import Teachability
@@ -83,19 +94,16 @@ teachability = Teachability(
     path_to_db_dir="./tmp/interactive/teachability_db"
 )
 ```
-Integrates a learning component that allows the agent to improve based on past interactions. For more information, refer to the [AutoGen Teachability Documentation](https://example.com/teachability).
 
 ### Initiation Function
 
+Starts the chat with a welcoming message:
+
 ```python
 def initiate_chat():
-    teachable_agent.initiate_chat(
-        user,
-        message="🐶 Hi, my name is Lou the Corgi, your helpful assistant! What's on your mind?"
-    )
+    ...
 ```
-This function starts the chat interface with a welcoming message, initiating the user-agent interaction.
----
+
 
 
 
