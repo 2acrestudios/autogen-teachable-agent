@@ -3,8 +3,8 @@
 <img src="https://2acrestudios.com/wp-content/uploads/2024/05/image-19.png" align="right" style="width: 300px;" />
 This repository hosts two versions of a custom conversable agent named "Lou the Corgi". These agents are built using the AutoGen framework, enriched with unique identity prompts, and integrate a teachability module to adapt and learn from interactions. The advanced version extends functionality with self-reflection capabilities and direct API integration.
 
-**Features**
----
+**Features:**
+<br />
 - **Custom Identity Prompt**: Both versions of the agent enhance user experience by responding with a unique identity.
 - **Teachability**: Integrates a learning component allowing the agent to improve based on past interactions, present in both versions.
 - **User Proxy Agent**: Simulates user interactions, useful for testing and development, used in both versions.
