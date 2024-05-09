@@ -21,7 +21,7 @@ This repository contains the implementation of a custom conversable agent named 
 To set up the project environment, ensure you have Python 3.8+ installed, and then install the dependencies from the `requirements.txt` file included in this repository. Do it in a virtual environment of your choice, or don't. But if you build more on top of this, you'll appreciate it later!
 
 ```plaintext
-autogen==1.0.16  # Substitute with the latest version compatible with your code
+autogen==1.0.16
 ```
 
 ## Installation
